@@ -1,9 +1,10 @@
-// gcc main.c matriz.c bombas.c -o campo-minado.exe
+// gcc main.c matriz.c bombas.c jogador.c -o campo-minado.exe
 // .\campo-minado.exe
 
 #include <stdio.h>
 #include "matriz.h"
 #include "bombas.h"
+#include "jogador.h"
 
 int main()
 {
@@ -11,7 +12,7 @@ int main()
     int colunas;
     int quantidadeBombas;
 
-    printf("--- CAMPO MINADO ---\n");
+    printf("--- CAMPO MINADO --- \n");
 
     printf("Digite o número de linhas: ");
     scanf("%d", &linhas);
@@ -23,7 +24,7 @@ int main()
     scanf("%d", &quantidadeBombas);
 
     while (!quantidadeBombasValida(linhas, colunas, quantidadeBombas)){
-        printf ("Quantidade de bombas inválida\n");
+        printf ("Quantidade de bombas inválida \n");
 
         printf("Digite a quantidade de bombas: ");
         scanf("%d", &quantidadeBombas);
@@ -31,9 +32,17 @@ int main()
 
     char **matriz = criarMatriz(linhas, colunas);
 
+    char **matrizVisivel = criarMatriz(linhas, colunas);
+
     posicionarBombas(matriz, linhas, colunas, quantidadeBombas);
 
-    mostrarMatriz(matriz, linhas, colunas);
+    // mostra apenas o que o jogador pode ver
+    mostrarMatriz(matrizVisivel, linhas, colunas);
+
+    jogar(matriz, matrizVisivel, linhas, colunas);
+
+    // mostra novamente depois da jogada
+    mostrarMatriz(matrizVisivel, linhas, colunas);
 
     liberarMatriz(matriz, linhas);
 
