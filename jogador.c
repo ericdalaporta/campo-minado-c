@@ -1,33 +1,42 @@
 #include <stdio.h>
 #include "jogador.h"
+#include "bombas.h"
 
-void jogar(char **matriz, char **matrizVisivel, int linhas, int colunas) {
+int jogar(char **matriz, char **matrizVisivel, int linhas, int colunas) {
 
     int linha;
     int coluna;
 
-    printf("Digite a linha: ");
+    printf("Digite a linha (1 a %d): ", linhas);
     scanf("%d", &linha);
 
-    printf("Digite a coluna: ");
+    printf("Digite a coluna (1 a %d): ", colunas);
     scanf("%d", &coluna);
 
-    while(linha < 0 || linha >= linhas || coluna < 0 || coluna >= colunas) {
+    while(linha < 1 || linha > linhas || coluna < 1 || coluna > colunas) {
         
-        printf("Posição inválida, preste atenção!\n");
+        printf("Posicao invalida, use valores de 1 ate %d e 1 ate %d.\n", linhas, colunas);
         
-        printf("Digite a linha: ");
+        printf("Digite a linha (1 a %d): ", linhas);
         scanf("%d", &linha);
 
-        printf("Digite a coluna: ");
+        printf("Digite a coluna (1 a %d): ", colunas);
         scanf("%d", &coluna);
     }
 
+    linha--;
+    coluna--;
+
     if (matriz[linha][coluna] == '*') {
-        printf("BROOO VOCÊ ACERTOU UMA BOMBA! \n");
+        matrizVisivel[linha][coluna] = 'X';
+        printf("Voce acertou uma bomba!\n");
+        return 1;
     }
     else {
-        matrizVisivel[linha][coluna] = matriz[linha][coluna];
-        printf("BOA!\n");
+        int bombasAoRedor = contarBombasAoRedor(matriz, linhas, colunas, linha, coluna);
+
+        matrizVisivel[linha][coluna] = (char)('0' + bombasAoRedor);
+        printf("Boa jogada!\n");
+        return 0;
     }
 }
