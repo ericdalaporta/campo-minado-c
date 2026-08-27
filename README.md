@@ -29,4 +29,5 @@ gcc main.c matriz.c bombas.c jogo.c jogador.c computador.c util.c -o campo-minad
 .\campo-minado.exe
 ```
 
-Durante uma partida manual, use `r linha coluna` para revelar, `m linha coluna` para marcar/desmarcar e `s` para sair.
+Durante uma partida manual, digite apenas a linha e a coluna de cada jogada.
+Use linha negativa para marcar ou desmarcar uma bandeira na mesma posicao.

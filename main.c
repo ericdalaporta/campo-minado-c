@@ -13,10 +13,11 @@ int main()
     srand((unsigned int) time(NULL));
 
     do {
-        printf("\n=== CAMPO MINADO ===\n");
+        // Menu simples, com espaço suficiente para ficar mais legível no terminal.
+        printf("\n=== CAMPO MINADO ===\n\n");
         printf("1 - Jogar\n");
         printf("2 - Computador jogar\n");
-        printf("0 - Sair\n");
+        printf("0 - Sair\n\n");
         opcao = lerInteiro("Escolha: ");
 
         if (opcao == 1 || opcao == 2) {
@@ -25,7 +26,7 @@ int main()
             int bombas = lerInteiro("Quantidade de bombas: ");
 
             while (!quantidadeBombasValida(linhas, colunas, bombas)) {
-                printf("Configuracao invalida. Use dimensoes positivas e menos bombas que celulas.\n");
+                printf("\nConfiguracao invalida. Use dimensoes positivas e menos bombas que celulas.\n\n");
                 bombas = lerInteiro("Quantidade de bombas: ");
             }
 
@@ -35,10 +36,10 @@ int main()
                 computadorJogar(linhas, colunas, bombas);
             }
         } else if (opcao != 0) {
-            printf("Opcao invalida.\n");
+            printf("\nOpcao invalida.\n\n");
         }
     } while (opcao != 0);
 
-    printf("Ate a proxima partida!\n");
+    printf("\nAte a proxima partida!\n");
     return 0;
 }

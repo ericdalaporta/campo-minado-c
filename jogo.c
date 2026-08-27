@@ -31,11 +31,38 @@ static int coordenadaValida(const Jogo *jogo, int linha, int coluna)
 
 static void revelarVizinhas(Jogo *jogo, int linha, int coluna)
 {
+    // Quando abre uma casa vazia, espalha a abertura para os vizinhos.
     for (int deltaLinha = -1; deltaLinha <= 1; deltaLinha++) {
         for (int deltaColuna = -1; deltaColuna <= 1; deltaColuna++) {
             revelarCelula(jogo, linha + deltaLinha, coluna + deltaColuna);
         }
     }
+}
+
+static char simboloVisivel(char valor, int revelarTudo)
+{
+    if (revelarTudo) {
+        return valor;
+    }
+    if (valor == '#') {
+        return '.';
+    }
+    if (valor == 'F') {
+        return 'F';
+    }
+    if (valor == '0') {
+        return ' ';
+    }
+    return valor;
+}
+
+static void imprimirSeparador(int colunas)
+{
+    printf("   +");
+    for (int coluna = 0; coluna < colunas; coluna++) {
+        printf("---+");
+    }
+    printf("\n");
 }
 
 Jogo *criarJogo(int linhas, int colunas, int bombas)
@@ -73,19 +100,24 @@ void destruirJogo(Jogo *jogo)
 
 void mostrarJogo(const Jogo *jogo, int revelarTudo)
 {
-    printf("\n    ");
+    // O tabuleiro usa uma grade simples para ficar mais legível no terminal.
+    printf("\n     ");
     for (int coluna = 0; coluna < jogo->colunas; coluna++) {
-        printf("%2d ", coluna + 1);
+        printf(" %2d ", coluna + 1);
     }
     printf("\n");
 
+    imprimirSeparador(jogo->colunas);
+
     for (int linha = 0; linha < jogo->linhas; linha++) {
-        printf("%2d  ", linha + 1);
+        printf("%2d |", linha + 1);
         for (int coluna = 0; coluna < jogo->colunas; coluna++) {
             char valor = revelarTudo ? jogo->tabuleiro[linha][coluna] : jogo->visao[linha][coluna];
-            printf("[%c] ", valor);
+            // Cada célula tem largura fixa para o cabeçalho não desalinha.
+            printf(" %c |", simboloVisivel(valor, revelarTudo));
         }
         printf("\n");
+        imprimirSeparador(jogo->colunas);
     }
 }
 
