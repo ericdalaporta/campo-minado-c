@@ -2,7 +2,7 @@
 #include "bombas.h"
 
 int quantidadeBombasValida(int linhas, int colunas, int quantidade){
-    return quantidade > 0 && quantidade <= linhas * colunas;
+    return linhas > 0 && colunas > 0 && quantidade > 0 && quantidade < linhas * colunas;
 }
 
 void posicionarBombas(char **matriz, int linhas, int colunas, int quantidade)
@@ -23,33 +23,29 @@ void posicionarBombas(char **matriz, int linhas, int colunas, int quantidade)
         }
     }
 }
-   
 
-int contarBombasAoRedor(char **matriz, int linhas, int colunas, int linha, int coluna)
+void calcularNumeros(char **matriz, int linhas, int colunas)
 {
-    int quantidadeBombas = 0;
-
-    for (int i = linha - 1; i <= linha + 1; i++) // percorre todas as casas vizinhas da posicao informada
-    {
-        for (int j = coluna - 1; j <= coluna + 1; j++)
-        {
-            if (i < 0 || i >= linhas || j < 0 || j >= colunas) // garantir que não vai ler posições fora da matriz
-            {
+    for (int linha = 0; linha < linhas; linha++) {
+        for (int coluna = 0; coluna < colunas; coluna++) {
+            if (matriz[linha][coluna] == '*') {
                 continue;
             }
 
-            if (i == linha && j == coluna) // não contar a própria
-            {
-                continue;
-            }
+            int bombasVizinhas = 0;
+            for (int deltaLinha = -1; deltaLinha <= 1; deltaLinha++) {
+                for (int deltaColuna = -1; deltaColuna <= 1; deltaColuna++) {
+                    int vizinhaLinha = linha + deltaLinha;
+                    int vizinhaColuna = coluna + deltaColuna;
 
-            if (matriz[i][j] == '*')
-            {
-                quantidadeBombas++;
+                    if (vizinhaLinha >= 0 && vizinhaLinha < linhas &&
+                        vizinhaColuna >= 0 && vizinhaColuna < colunas &&
+                        matriz[vizinhaLinha][vizinhaColuna] == '*') {
+                        bombasVizinhas++;
+                    }
+                }
             }
+            matriz[linha][coluna] = (char) ('0' + bombasVizinhas);
         }
     }
-
-    return quantidadeBombas;
 }
-

@@ -1,6 +1,7 @@
 #ifndef JOGADOR_H
 #define JOGADOR_H
 
-int jogar(char **matriz, char **matrizVisivel, int linhas, int colunas);
+void jogarPartida(int linhas, int colunas, int bombas);
+void computadorJogar(int linhas, int colunas, int bombas);
 
 #endif

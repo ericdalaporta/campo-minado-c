@@ -1,89 +1,44 @@
-// gcc main.c matriz.c bombas.c jogador.c -o campo-minado.exe
-// .\campo-minado.exe
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "matriz.h"
+
 #include "bombas.h"
 #include "jogador.h"
-
-static void mostrarMenu(void)
-{
-    printf("\n======================================\n");
-    printf("           CAMPO MINADO\n");
-    printf("======================================\n");
-    printf("1 - Jogar\n");
-    printf("2 - Sair\n");
-    printf("======================================\n");
-}
-
-static void lerInteiro(const char *mensagem, int *valor)
-{
-    printf("%s", mensagem);
-    scanf("%d", valor);
-}
+#include "util.h"
 
 int main()
 {
-    srand((unsigned)time(NULL));
-
     int opcao;
-    int linhas;
-    int colunas;
-    int quantidadeBombas;
 
-    mostrarMenu();
-    lerInteiro("Escolha uma opcao: ", &opcao);
+    srand((unsigned int) time(NULL));
 
-    if (opcao == 2)
-    {
-        printf("Saindo do jogo...\n");
-        return 0;
-    }
+    do {
+        printf("\n=== CAMPO MINADO ===\n");
+        printf("1 - Jogar\n");
+        printf("2 - Computador jogar\n");
+        printf("0 - Sair\n");
+        opcao = lerInteiro("Escolha: ");
 
-    if (opcao != 1)
-    {
-        printf("Opcao invalida. Reinicie e escolha 1 ou 2.\n");
-        return 1;
-    }
+        if (opcao == 1 || opcao == 2) {
+            int linhas = lerInteiro("Numero de linhas: ");
+            int colunas = lerInteiro("Numero de colunas: ");
+            int bombas = lerInteiro("Quantidade de bombas: ");
 
-    printf("\nVamos configurar a partida.\n");
-    lerInteiro("Digite o numero de linhas: ", &linhas);
-    lerInteiro("Digite o numero de colunas: ", &colunas);
-    lerInteiro("Digite a quantidade de bombas: ", &quantidadeBombas);
+            while (!quantidadeBombasValida(linhas, colunas, bombas)) {
+                printf("Configuracao invalida. Use dimensoes positivas e menos bombas que celulas.\n");
+                bombas = lerInteiro("Quantidade de bombas: ");
+            }
 
-    while (!quantidadeBombasValida(linhas, colunas, quantidadeBombas))
-    {
-        printf("Quantidade de bombas invalida. Digite um valor entre 1 e %d.\n", linhas * colunas);
-        lerInteiro("Digite a quantidade de bombas: ", &quantidadeBombas);
-    }
+            if (opcao == 1) {
+                jogarPartida(linhas, colunas, bombas);
+            } else {
+                computadorJogar(linhas, colunas, bombas);
+            }
+        } else if (opcao != 0) {
+            printf("Opcao invalida.\n");
+        }
+    } while (opcao != 0);
 
-    char **matriz = criarMatriz(linhas, colunas);
-    char **matrizVisivel = criarMatriz(linhas, colunas);
-
-    posicionarBombas(matriz, linhas, colunas, quantidadeBombas);
-
-    int acertouBomba = 0;
-    time_t inicioPartida = time(NULL);
-
-    while (!acertouBomba)
-    {
-        printf("\nTabuleiro atual:\n");
-        mostrarMatriz(matrizVisivel, linhas, colunas);
-
-        acertouBomba = jogar(matriz, matrizVisivel, linhas, colunas);
-    }
-
-    time_t fimPartida = time(NULL);
-    double tempoPartida = difftime(fimPartida, inicioPartida);
-
-    printf("\nTabuleiro final:\n");
-    mostrarMatriz(matrizVisivel, linhas, colunas);
-    printf("Tempo da partida: %.0f segundos\n", tempoPartida);
-
-    liberarMatriz(matriz, linhas);
-    liberarMatriz(matrizVisivel, linhas);
-
+    printf("Ate a proxima partida!\n");
     return 0;
 }

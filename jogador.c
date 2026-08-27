@@ -1,42 +1,55 @@
 #include <stdio.h>
+
 #include "jogador.h"
-#include "bombas.h"
+#include "jogo.h"
 
-int jogar(char **matriz, char **matrizVisivel, int linhas, int colunas) {
-
+void jogarPartida(int linhas, int colunas, int bombas)
+{
+    Jogo *jogo = criarJogo(linhas, colunas, bombas);
+    char comando;
     int linha;
     int coluna;
 
-    printf("Digite a linha (1 a %d): ", linhas);
-    scanf("%d", &linha);
-
-    printf("Digite a coluna (1 a %d): ", colunas);
-    scanf("%d", &coluna);
-
-    while(linha < 1 || linha > linhas || coluna < 1 || coluna > colunas) {
-        
-        printf("Posicao invalida, use valores de 1 ate %d e 1 ate %d.\n", linhas, colunas);
-        
-        printf("Digite a linha (1 a %d): ", linhas);
-        scanf("%d", &linha);
-
-        printf("Digite a coluna (1 a %d): ", colunas);
-        scanf("%d", &coluna);
+    if (jogo == NULL) {
+        printf("Nao foi possivel criar o jogo.\n");
+        return;
     }
 
-    linha--;
-    coluna--;
-
-    if (matriz[linha][coluna] == '*') {
-        matrizVisivel[linha][coluna] = 'X';
-        printf("Voce acertou uma bomba!\n");
-        return 1;
+    printf("Comandos: r linha coluna (revelar), m linha coluna (marcar), s (sair)\n");
+    while (!jogo->terminou) {
+        mostrarJogo(jogo, 0);
+        printf("Acao: ");
+        if (scanf(" %c", &comando) != 1) {
+            break;
+        }
+        if (comando == 's') {
+            break;
+        }
+        if (scanf("%d %d", &linha, &coluna) != 2) {
+            printf("Use: r 2 3 ou m 2 3.\n");
+            while (getchar() != '\n') { }
+            continue;
+        }
+        linha--;
+        coluna--;
+        if (comando == 'r') {
+            int resultado = revelarCelula(jogo, linha, coluna);
+            if (resultado == -1) {
+                printf("Voce encontrou uma bomba!\n");
+            } else if (resultado == 0) {
+                printf("Posicao invalida ou ja revelada.\n");
+            }
+        } else if (comando == 'm') {
+            if (!alternarMarcacao(jogo, linha, coluna)) {
+                printf("Nao foi possivel marcar essa posicao.\n");
+            }
+        }
     }
-    else {
-        int bombasAoRedor = contarBombasAoRedor(matriz, linhas, colunas, linha, coluna);
 
-        matrizVisivel[linha][coluna] = (char)('0' + bombasAoRedor);
-        printf("Boa jogada!\n");
-        return 0;
+    if (jogo->terminou) {
+        mostrarJogo(jogo, 0);
+        printf(jogoVenceu(jogo) ? "Voce venceu!" : "Fim de jogo.");
+        printf(" Tempo: %.0f segundos.\n", tempoDecorrido(jogo));
     }
+    destruirJogo(jogo);
 }

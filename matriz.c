@@ -30,8 +30,8 @@ char **criarMatriz(int linhas, int colunas){
             exit(1);
 
         }
-        for (int j = 0; j < colunas; j++){
-            matriz[i][j] = '.';
+        for (int j = 0; j < colunas; j++) {
+            matriz[i][j] = ' ';
         }
     }
     return matriz;
@@ -47,42 +47,22 @@ void liberarMatriz(char **matriz, int linhas){
 
 void mostrarMatriz(char **matriz, int linhas, int colunas)
 {
-    printf("    ");
-
-    for (int j = 0; j < colunas; j++)
-    {
-        printf(" %2d", j + 1);
-    }
-
-    printf("\n");
-
-    printf("   +");
-
-    for (int j = 0; j < colunas; j++)
-    {
-        printf("---");
-    }
-
-    printf("+\n");
-
     for (int i = 0; i < linhas; i++)
     {
-        printf("%2d |", i + 1);
-
         for (int j = 0; j < colunas; j++)
         {
-            printf(" %c ", matriz[i][j]);
+            printf("[%c]", matriz[i][j]);
         }
 
-        printf("|\n");
+        printf("\n");
     }
+}
 
-    printf("   +");
-
-    for (int j = 0; j < colunas; j++)
-    {
-        printf("---");
+void preencherMatriz(char **matriz, int linhas, int colunas, char valor)
+{
+    for (int linha = 0; linha < linhas; linha++) {
+        for (int coluna = 0; coluna < colunas; coluna++) {
+            matriz[linha][coluna] = valor;
+        }
     }
-
-    printf("+\n");
 }

@@ -7,4 +7,6 @@ void liberarMatriz(char **matriz, int linhas);
 
 void mostrarMatriz(char **matriz, int linhas, int colunas);
 
+void preencherMatriz(char **matriz, int linhas, int colunas, char valor);
+
 #endif

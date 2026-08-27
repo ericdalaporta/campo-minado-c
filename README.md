@@ -1,51 +1,32 @@
-# campo-minado-c
-* **Matriz**
+# Campo Minado em C
 
-  * Criar matriz dinamicamente
-  * Inicializar matriz
-  * Mostrar matriz
-  * Liberar memória
+O jogo usa duas matrizes alocadas dinamicamente: o tabuleiro real e a visao do jogador.
+A primeira jogada e protegida contra bombas.
 
-* **Bombas**
+## Arquivos
 
-  * Usuário escolhe quantidade de bombas
-  * Posicionar bombas aleatoriamente
-  * Verificar se uma posição tem bomba
-  * Contar bombas vizinhas
+- `main.c`: menu e configuracao da partida.
+- `matriz.c/.h`: alocacao e operacoes basicas das matrizes.
+- `bombas.c/.h`: bombas e contagem de vizinhos.
+- `jogo.c/.h`: estado, regras, revelacao e tempo.
+- `jogador.c/.h`: comandos do jogador.
+- `computador.c`: deducao de bombas, casas seguras e escolha por menor risco.
+- `util.c/.h`: leitura de inteiros.
 
-* **Jogador**
+## Compilacao direta
 
-  * Escolher linha e coluna
-  * Revelar posição
-  * Perder ao encontrar uma bomba
-  * Verificar vitória
-  * Revelar regiões automaticamente
+Linux:
 
-* **Computador**
+```bash
+gcc main.c matriz.c bombas.c jogo.c jogador.c computador.c util.c -o campo-minado
+./campo-minado
+```
 
-  * Computador jogar sozinho
-  * Usar informações do tabuleiro para tomar decisões
-  * Identificar posições seguras
-  * Identificar possíveis bombas
-  * Usar probabilidade quando não conseguir deduzir
+Windows PowerShell:
 
-* **Tempo**
+```powershell
+gcc main.c matriz.c bombas.c jogo.c jogador.c computador.c util.c -o campo-minado.exe
+.\campo-minado.exe
+```
 
-  * Contar tempo da partida
-  * Mostrar tempo final
-
-* **Menu**
-
-  * Jogar
-  * Computador jogar
-  * Sair
-
-* **Organização**
-
-  * `main.c`
-  * `matriz.c / matriz.h`
-  * `bombas.c / bombas.h`
-  * `jogador.c / jogador.h`
-  * `computador.c / computador.h`
-  * `jogo.c / jogo.h`
-  * `util.c / util.h`
+Durante uma partida manual, use `r linha coluna` para revelar, `m linha coluna` para marcar/desmarcar e `s` para sair.
