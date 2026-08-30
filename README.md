@@ -29,5 +29,11 @@ gcc main.c matriz.c bombas.c jogo.c jogador.c computador.c util.c -o campo-minad
 .\campo-minado.exe
 ```
 
-Durante uma partida manual, digite apenas a linha e a coluna de cada jogada.
-Use linha negativa para marcar ou desmarcar uma bandeira na mesma posicao.
+Durante uma partida manual, escolha 1 para abrir uma casa, 2 para marcar e 3 para desmarcar uma bandeira.
+
+Simbolos do tabuleiro:
+
+- `.`: casa ainda oculta.
+- `F`: bandeira.
+- `B`: bomba revelada ao final ou ao explodir.
+- espaco em branco: casa aberta sem bombas vizinhas.

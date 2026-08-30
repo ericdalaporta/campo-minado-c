@@ -31,17 +31,59 @@ static int coordenadaValida(const Jogo *jogo, int linha, int coluna)
 
 static void revelarVizinhas(Jogo *jogo, int linha, int coluna)
 {
-    // Quando abre uma casa vazia, espalha a abertura para os vizinhos.
-    for (int deltaLinha = -1; deltaLinha <= 1; deltaLinha++) {
-        for (int deltaColuna = -1; deltaColuna <= 1; deltaColuna++) {
-            revelarCelula(jogo, linha + deltaLinha, coluna + deltaColuna);
+    int capacidade = jogo->linhas * jogo->colunas;
+    int *pilhaLinhas = malloc(capacidade * sizeof(int));
+    int *pilhaColunas = malloc(capacidade * sizeof(int));
+    int topo = 0;
+
+    if (pilhaLinhas == NULL || pilhaColunas == NULL) {
+        free(pilhaLinhas);
+        free(pilhaColunas);
+        return;
+    }
+
+    pilhaLinhas[topo] = linha;
+    pilhaColunas[topo] = coluna;
+    topo++;
+
+    while (topo > 0) {
+        topo--;
+        linha = pilhaLinhas[topo];
+        coluna = pilhaColunas[topo];
+
+        for (int deltaLinha = -1; deltaLinha <= 1; deltaLinha++) {
+            for (int deltaColuna = -1; deltaColuna <= 1; deltaColuna++) {
+                int novaLinha = linha + deltaLinha;
+                int novaColuna = coluna + deltaColuna;
+
+                if (novaLinha < 0 || novaLinha >= jogo->linhas ||
+                    novaColuna < 0 || novaColuna >= jogo->colunas ||
+                    jogo->visao[novaLinha][novaColuna] != '#') {
+                    continue;
+                }
+
+                jogo->visao[novaLinha][novaColuna] = jogo->tabuleiro[novaLinha][novaColuna];
+                jogo->reveladas++;
+
+                if (jogo->tabuleiro[novaLinha][novaColuna] == '0') {
+                    pilhaLinhas[topo] = novaLinha;
+                    pilhaColunas[topo] = novaColuna;
+                    topo++;
+                }
+            }
         }
     }
+
+    free(pilhaLinhas);
+    free(pilhaColunas);
 }
 
 static char simboloVisivel(char valor, int revelarTudo)
 {
     if (revelarTudo) {
+        if (valor == '*') {
+            return 'B';
+        }
         return valor;
     }
     if (valor == '#') {
@@ -100,7 +142,7 @@ void destruirJogo(Jogo *jogo)
 
 void mostrarJogo(const Jogo *jogo, int revelarTudo)
 {
-    // O tabuleiro usa uma grade simples para ficar mais legível no terminal.
+    // o tabuleiro usa uma grade simples para ficar mais legível no terminal.
     printf("\n     ");
     for (int coluna = 0; coluna < jogo->colunas; coluna++) {
         printf(" %2d ", coluna + 1);
@@ -164,6 +206,19 @@ int alternarMarcacao(Jogo *jogo, int linha, int coluna)
         jogo->visao[linha][coluna] = 'F';
         jogo->marcadas++;
         return 1;
+    }
+    if (jogo->visao[linha][coluna] == 'F') {
+        jogo->visao[linha][coluna] = '#';
+        jogo->marcadas--;
+        return 1;
+    }
+    return 0;
+}
+
+int desmarcarMarcacao(Jogo *jogo, int linha, int coluna)
+{
+    if (jogo->terminou || !coordenadaValida(jogo, linha, coluna)) {
+        return 0;
     }
     if (jogo->visao[linha][coluna] == 'F') {
         jogo->visao[linha][coluna] = '#';

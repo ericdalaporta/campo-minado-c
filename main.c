@@ -10,10 +10,9 @@ int main()
 {
     int opcao;
 
-    srand((unsigned int) time(NULL));
+    srand((unsigned int) time(NULL)); // inicializa o gerador de números aleatórios
 
     do {
-        // Menu simples, com espaço suficiente para ficar mais legível no terminal.
         printf("\n=== CAMPO MINADO ===\n\n");
         printf("1 - Jogar\n");
         printf("2 - Computador jogar\n");

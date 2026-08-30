@@ -5,7 +5,7 @@
 
 char **criarMatriz(int linhas, int colunas){
 
-    // Aloca memória para os ponteiros das linhas
+    // aloca memória para os ponteiros das linhas
     char **matriz = malloc(linhas * sizeof(char*));
 
     if (matriz == NULL) {
@@ -13,7 +13,7 @@ char **criarMatriz(int linhas, int colunas){
         exit(1);
     }
 
-    // Aloca cada linha da matriz.
+    // aloca cada linha da matriz.
     for (int i = 0; i < linhas; i++){
         matriz[i] = malloc(colunas * sizeof(char));
 

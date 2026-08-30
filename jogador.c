@@ -15,32 +15,37 @@ void jogarPartida(int linhas, int colunas, int bombas)
         return;
     }
 
-    // Mensagem curta para explicar o controle sem entulhar a tela.
-    printf("\nDigite apenas a linha e a coluna. Use linha negativa para marcar ou desmarcar uma bandeira.\n\n");
+    printf("\nEscolha 1 para abrir uma casa, 2 para marcar e 3 para desmarcar uma bandeira.\n\n");
 
     while (!jogo->terminou) {
         int resultado;
-        int modoBandeira = 0;
+        int acao;
 
         mostrarJogo(jogo, 0);
         printf("\n");
+        acao = lerInteiro("Acao (1 abrir, 2 marcar, 3 desmarcar): ");
         linha = lerInteiro("Linha: ");
         coluna = lerInteiro("Coluna: ");
 
-        if (linha < 0) {
-            // Convenção simples para não precisar de um menu extra de ação.
-            modoBandeira = 1;
-            linha = -linha;
+        if (acao != 1 && acao != 2 && acao != 3) {
+            printf("\nAcao invalida. Use 1, 2 ou 3.\n\n");
+            continue;
         }
 
         linha--;
         coluna--;
 
-        if (modoBandeira) {
+        if (acao == 2) {
             if (alternarMarcacao(jogo, linha, coluna)) {
                 printf("\nBandeira atualizada.\n\n");
             } else {
                 printf("\nNao foi possivel marcar essa posicao.\n\n");
+            }
+        } else if (acao == 3) {
+            if (desmarcarMarcacao(jogo, linha, coluna)) {
+                printf("\nBandeira removida.\n\n");
+            } else {
+                printf("\nNao ha bandeira nessa posicao.\n\n");
             }
         } else {
             resultado = revelarCelula(jogo, linha, coluna);
@@ -60,7 +65,7 @@ void jogarPartida(int linhas, int colunas, int bombas)
         }
     }
 
-    // Aqui o tabuleiro final aparece logo depois da ultima jogada.
+    // aqui o tabuleiro final aparece logo depois da ultima jogada.
     mostrarJogo(jogo, 0);
     printf("\n%s", jogoVenceu(jogo) ? "Voce venceu!" : "Fim de jogo.");
     printf(" Tempo: %.0f segundos.\n\n", tempoDecorrido(jogo));

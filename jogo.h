@@ -15,13 +15,14 @@ typedef struct {
     char **tabuleiro;
     char **visao;
     time_t inicio;
-} Jogo;
+} Jogo; 
 
 Jogo *criarJogo(int linhas, int colunas, int bombas);
 void destruirJogo(Jogo *jogo);
 void mostrarJogo(const Jogo *jogo, int revelarTudo);
 int revelarCelula(Jogo *jogo, int linha, int coluna);
 int alternarMarcacao(Jogo *jogo, int linha, int coluna);
+int desmarcarMarcacao(Jogo *jogo, int linha, int coluna);
 int jogoVenceu(const Jogo *jogo);
 double tempoDecorrido(const Jogo *jogo);
 
