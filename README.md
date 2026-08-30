@@ -28,12 +28,3 @@ Windows PowerShell:
 gcc main.c matriz.c bombas.c jogo.c jogador.c computador.c util.c -o campo-minado.exe
 .\campo-minado.exe
 ```
-
-Durante uma partida manual, escolha 1 para abrir uma casa, 2 para marcar e 3 para desmarcar uma bandeira.
-
-Simbolos do tabuleiro:
-
-- `.`: casa ainda oculta.
-- `F`: bandeira.
-- `B`: bomba revelada ao final ou ao explodir.
-- espaco em branco: casa aberta sem bombas vizinhas.
